@@ -11,7 +11,7 @@ var FlagDefinitions = []cli.Flag{
 	},
 	cli.StringFlag{
 		Name:     "psqlURL",
-		Usage:    "PostgresSQL database connection string. Example host=<host> user=<user> sslmode=disable password=<password> dbname=<dbname>",
+		Usage:    "PostgresSQL database connection string. Example 'host=<host> user=<user> sslmode=disable password=<password> dbname=<dbname>' or 'postgres://<user>:<password>@<host>:<port>/<dbname>?sslmode=disable",
 		EnvVar:   "PSQL_URL",
 		Required: true,
 	},

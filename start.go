@@ -1,7 +1,17 @@
 package usercrm
 
 import (
+	"context"
 	"fmt"
+	"os"
+	"os/signal"
+	"time"
+
+	"github.com/labstack/gommon/log"
+
+	"github.com/memclutter/user-crm/endpoints"
+
+	"github.com/labstack/echo"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -26,6 +36,41 @@ func Start(c *cli.Context) error {
 
 	// Apply migrations
 	db.AutoMigrate(&models.User{}, &models.Country{})
+
+	// Init http router
+	e := echo.New()
+	e.Logger.SetLevel(log.INFO)
+	e.Debug = flags.Debug
+
+	// Set dependencies
+	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			c.Set("db", db)
+			c.Set("flags", flags)
+			return next(c)
+		}
+	})
+
+	// Routes
+	endpoints.NewCountries(e)
+	endpoints.NewUsers(e)
+
+	// Run server
+	go func() {
+		if err := e.Start(":9000"); err != nil {
+			e.Logger.Info("Shutting down the server")
+		}
+	}()
+
+	// Wait 10 sec for server shutdown
+	shutdown := make(chan os.Signal)
+	signal.Notify(shutdown, os.Interrupt)
+	<-shutdown
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := e.Shutdown(ctx); err != nil {
+		e.Logger.Fatal(err)
+	}
 
 	return nil
 }

@@ -19,7 +19,7 @@ migrate -path migrations -database 'postgres://user:secret@localhost:5432/test?s
 Generate new migration file
 
 ```
-migrate create -ext sql -dir migrations [name]]
+migrate create -ext sql -dir migrations [name]
 ```
 
 ## Swagger docs

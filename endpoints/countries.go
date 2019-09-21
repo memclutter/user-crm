@@ -1,8 +1,8 @@
 package endpoints
 
-import "github.com/labstack/echo"
+import "github.com/labstack/echo/v4"
 
-func NewCountries(e *echo.Echo) *Countries {
+func NewCountries(e *echo.Group) *Countries {
 	ep := &Countries{}
 
 	e.GET("/countries", ep.List)

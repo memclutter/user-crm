@@ -7,18 +7,23 @@ import (
 	"os/signal"
 	"time"
 
-	"github.com/labstack/gommon/log"
-
-	"github.com/memclutter/user-crm/endpoints"
-
-	"github.com/labstack/echo"
-
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
+	_ "github.com/memclutter/user-crm/docs"
+	"github.com/memclutter/user-crm/endpoints"
 	"github.com/memclutter/user-crm/models"
+	echoSwagger "github.com/swaggo/echo-swagger"
 	"github.com/urfave/cli"
 )
 
+// @title User CRM
+// @version 1.0
+// @description CRM example. User database management.
+//
+// @host localhost:9000
+// @BasePath /api/
 func Start(c *cli.Context) error {
 
 	// Parse flags
@@ -51,9 +56,14 @@ func Start(c *cli.Context) error {
 		}
 	})
 
+	api := e.Group("/api")
+
+	// Swagger docs
+	api.GET("/docs/*", echoSwagger.WrapHandler)
+
 	// Routes
-	endpoints.NewCountries(e)
-	endpoints.NewUsers(e)
+	endpoints.NewCountries(api)
+	endpoints.NewUsers(api)
 
 	// Run server
 	go func() {

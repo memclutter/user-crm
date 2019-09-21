@@ -1,8 +1,8 @@
 package endpoints
 
-import "github.com/labstack/echo"
+import "github.com/labstack/echo/v4"
 
-func NewUsers(e *echo.Echo) *Users {
+func NewUsers(e *echo.Group) *Users {
 	ep := &Users{}
 
 	e.GET("/users", ep.List)

@@ -21,3 +21,13 @@ Generate new migration file
 ```
 migrate create -ext sql -dir migrations [name]]
 ```
+
+## Swagger docs
+
+Use https://github.com/swaggo/swag for api documentations. Run 
+
+```
+swag init -g start.go
+```
+
+for generate docs. Open docs on http://localhost:9000/api/docs/index.html

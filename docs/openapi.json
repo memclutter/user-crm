@@ -49,7 +49,9 @@
         }
       },
       "post": {
-        "tags": ["countries"],
+        "tags": [
+          "countries"
+        ],
         "summary": "Create country",
         "requestBody": {
           "content": {
@@ -81,7 +83,9 @@
     },
     "/countries/:code": {
       "put": {
-        "tags": ["countries"],
+        "tags": [
+          "countries"
+        ],
         "summary": "Update country",
         "parameters": [
           {
@@ -121,7 +125,9 @@
         }
       },
       "delete": {
-        "tags": ["countries"],
+        "tags": [
+          "countries"
+        ],
         "summary": "Remove country",
         "parameters": [
           {
@@ -130,6 +136,162 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success response"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Get list of users",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/limit"
+          },
+          {
+            "$ref": "#/components/parameters/offset"
+          },
+          {
+            "in": "query",
+            "name": "countryCode",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "ageRange[]",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          },
+          {
+            "in": "query",
+            "name": "gender",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "male",
+                "female"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserList"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Create user",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/:id": {
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Update user",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Remove user",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
             }
           }
         ],
@@ -178,7 +340,8 @@
             "type": "string"
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "format": "email"
           },
           "birthday": {
             "type": "string",
@@ -188,7 +351,11 @@
             "type": "string"
           },
           "gender": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "male",
+              "female"
+            ]
           }
         }
       },

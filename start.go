@@ -11,10 +11,8 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
-	_ "github.com/memclutter/user-crm/docs"
 	"github.com/memclutter/user-crm/endpoints"
 	"github.com/memclutter/user-crm/models"
-	echoSwagger "github.com/swaggo/echo-swagger"
 	"github.com/urfave/cli"
 )
 
@@ -59,7 +57,7 @@ func Start(c *cli.Context) error {
 	api := e.Group("/api")
 
 	// Swagger docs
-	api.GET("/docs/*", echoSwagger.WrapHandler)
+	api.Static("/docs", flags.DocsRoot)
 
 	// Routes
 	endpoints.NewCountries(api)

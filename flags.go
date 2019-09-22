@@ -10,6 +10,13 @@ var FlagDefinitions = []cli.Flag{
 		Required: false,
 	},
 	cli.StringFlag{
+		Name:     "docsRoot",
+		Usage:    "Root folder with api docs",
+		EnvVar:   "DOCS_ROOT",
+		Value:    "docs",
+		Required: false,
+	},
+	cli.StringFlag{
 		Name:     "psqlURL",
 		Usage:    "PostgresSQL database connection string. Example 'host=<host> user=<user> sslmode=disable password=<password> dbname=<dbname>' or 'postgres://<user>:<password>@<host>:<port>/<dbname>?sslmode=disable",
 		EnvVar:   "PSQL_URL",
@@ -18,13 +25,15 @@ var FlagDefinitions = []cli.Flag{
 }
 
 type Flags struct {
-	Debug   bool
-	PsqlURL string
+	Debug    bool
+	DocsRoot string
+	PsqlURL  string
 }
 
 func NewFlags(c *cli.Context) *Flags {
 	return &Flags{
-		Debug:   c.Bool("debug"),
-		PsqlURL: c.String("psqlURL"),
+		Debug:    c.Bool("debug"),
+		DocsRoot: c.String("docsRoot"),
+		PsqlURL:  c.String("psqlURL"),
 	}
 }

@@ -25,3 +25,11 @@ migrate create -ext sql -dir migrations [name]
 ## Swagger docs
 
 Swagger docs available on address http://localhost:9000/api/docs/index.html
+
+## Watch changes with modd
+
+Install https://github.com/cortesi/modd for best development experience. Run local server
+
+```
+modd 
+```

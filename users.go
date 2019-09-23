@@ -1,4 +1,4 @@
-package endpoints
+package usercrm
 
 import "github.com/labstack/echo/v4"
 

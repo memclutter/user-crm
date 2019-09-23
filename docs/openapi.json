@@ -311,7 +311,7 @@
           "code": {
             "type": "string"
           },
-          "title": {
+          "name": {
             "type": "string"
           }
         }

@@ -11,7 +11,6 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
-	"github.com/memclutter/user-crm/endpoints"
 	"github.com/memclutter/user-crm/models"
 	"github.com/urfave/cli"
 )
@@ -60,8 +59,8 @@ func Start(c *cli.Context) error {
 	api.Static("/docs", flags.DocsRoot)
 
 	// Routes
-	endpoints.NewCountries(api)
-	endpoints.NewUsers(api)
+	NewCountries(api)
+	NewUsers(api)
 
 	// Run server
 	go func() {

@@ -26,6 +26,11 @@ type CountriesListRequest struct {
 	Limit  int64 `query:"limit"`
 }
 
+type CountriesFormRequest struct {
+	Code string `json:"code" form:"code"`
+	Name string `json:"name" form:"name"`
+}
+
 type Countries struct {
 }
 
@@ -70,6 +75,29 @@ func (e Countries) List(c echo.Context) error {
 
 func (e Countries) Create(c echo.Context) error {
 
+	// Parse request
+	req := new(CountriesFormRequest)
+	if err := c.Bind(req); err != nil {
+		c.Logger().Error(err)
+		return err
+	} else if err := c.Validate(req); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	// TODO validation
+
+	// Get database instance
+	db, ok := c.Get("db").(*gorm.DB)
+	if !ok {
+		err := errors.New("database instance missing in context")
+		c.Logger().Error(err)
+		return err
+	}
+
+	_ = db
+
+	// TODO Insert record
+	// TODO return response
 	return nil
 }
 

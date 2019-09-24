@@ -2,15 +2,13 @@ package models
 
 import (
 	"time"
-
-	"github.com/jinzhu/gorm"
 )
 
 type User struct {
-	gorm.Model
-	Username    string
-	Email       string
-	Birthday    time.Time
-	CountryCode string
-	Gender      string
+	ID          uint      `gorm:"primary_key" json:"id"`
+	Username    string    `json:"username"`
+	Email       string    `json:"email"`
+	Birthday    time.Time `json:"birthday"`
+	CountryCode string    `json:"country_code"`
+	Gender      string    `json:"gender"`
 }

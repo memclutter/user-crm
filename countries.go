@@ -1,6 +1,7 @@
 package usercrm
 
 import (
+	"context"
 	"errors"
 	"net/http"
 
@@ -27,8 +28,8 @@ type CountriesListRequest struct {
 }
 
 type CountriesFormRequest struct {
-	Code string `json:"code" form:"code"`
-	Name string `json:"name" form:"name"`
+	Code string `json:"code" form:"code" validate:"required,country_code"`
+	Name string `json:"name" form:"name" validate:"required"`
 }
 
 type Countries struct {
@@ -75,16 +76,13 @@ func (e Countries) List(c echo.Context) error {
 
 func (e Countries) Create(c echo.Context) error {
 
-	// Parse request
-	req := new(CountriesFormRequest)
-	if err := c.Bind(req); err != nil {
+	// Get custom validator instance
+	cv, ok := c.Get("validator").(*CustomValidator)
+	if !ok {
+		err := errors.New("validator instance missing in context")
 		c.Logger().Error(err)
 		return err
-	} else if err := c.Validate(req); err != nil {
-		return c.JSON(http.StatusBadRequest, err)
 	}
-
-	// TODO validation
 
 	// Get database instance
 	db, ok := c.Get("db").(*gorm.DB)
@@ -94,11 +92,29 @@ func (e Countries) Create(c echo.Context) error {
 		return err
 	}
 
-	_ = db
+	// Create validation context
+	ctx := context.WithValue(c.Request().Context(), "db", db)
 
-	// TODO Insert record
-	// TODO return response
-	return nil
+	// Parse request
+	req := new(CountriesFormRequest)
+	if err := c.Bind(req); err != nil {
+		c.Logger().Error(err)
+		return err
+	} else if ok, errs := cv.ValidateCtx(req, ctx); !ok {
+		return c.JSON(http.StatusBadRequest, errs)
+	}
+
+	record := &models.Country{
+		Code: req.Code,
+		Name: req.Name,
+	}
+
+	if err := db.Create(record).Error; err != nil {
+		c.Logger().Error(err)
+		return err
+	}
+
+	return c.JSON(http.StatusCreated, record)
 }
 
 func (e Countries) Update(c echo.Context) error {

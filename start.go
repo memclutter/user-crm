@@ -44,11 +44,18 @@ func Start(c *cli.Context) error {
 	e.Logger.SetLevel(log.INFO)
 	e.Debug = flags.Debug
 
+	// Create custom validator
+	customValidator, err := NewCustomValidator()
+	if err != nil {
+		return err
+	}
+
 	// Set dependencies
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			c.Set("db", db)
 			c.Set("flags", flags)
+			c.Set("validator", customValidator)
 			return next(c)
 		}
 	})

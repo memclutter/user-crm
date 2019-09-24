@@ -172,5 +172,31 @@ func (e Countries) Update(c echo.Context) error {
 
 func (e Countries) Remove(c echo.Context) error {
 
-	return nil
+	// Parse country code from path
+	code := c.Param("code")
+
+	// Get database instance
+	db, ok := c.Get("db").(*gorm.DB)
+	if !ok {
+		err := errors.New("database instance missing in context")
+		c.Logger().Error(err)
+		return err
+	}
+
+	// Find record
+	record := &models.Country{}
+	if err := db.Model(record).Where("code = ?", code).First(record).Error; err == gorm.ErrRecordNotFound {
+		return c.NoContent(http.StatusNotFound)
+	} else if err != nil {
+		c.Logger().Error(err)
+		return err
+	}
+
+	// Remove record
+	if err := db.Delete(record).Error; err != nil {
+		c.Logger().Error(err)
+		return err
+	}
+
+	return c.NoContent(http.StatusNoContent)
 }

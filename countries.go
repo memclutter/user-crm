@@ -93,7 +93,7 @@ func (e Countries) Create(c echo.Context) error {
 	}
 
 	// Create validation context
-	ctx := context.WithValue(c.Request().Context(), "db", db)
+	ctx := context.WithValue(c.Request().Context(), "db", db.Model(&models.Country{}))
 
 	// Parse request
 	req := new(CountriesFormRequest)
@@ -119,7 +119,55 @@ func (e Countries) Create(c echo.Context) error {
 
 func (e Countries) Update(c echo.Context) error {
 
-	return nil
+	// Parse country code from path
+	code := c.Param("code")
+
+	// Get custom validator instance
+	cv, ok := c.Get("validator").(*CustomValidator)
+	if !ok {
+		err := errors.New("validator instance missing in context")
+		c.Logger().Error(err)
+		return err
+	}
+
+	// Get database instance
+	db, ok := c.Get("db").(*gorm.DB)
+	if !ok {
+		err := errors.New("database instance missing in context")
+		c.Logger().Error(err)
+		return err
+	}
+
+	// Find record
+	record := &models.Country{}
+	if err := db.Model(&record).Where("code = ?", code).First(record).Error; err == gorm.ErrRecordNotFound {
+		return c.NoContent(http.StatusNotFound)
+	} else if err != nil {
+		c.Logger().Error(err)
+		return err
+	}
+
+	// Create validation context
+	ctx := context.WithValue(c.Request().Context(), "db", db.Model(&models.Country{}).Where("code != ?", code))
+
+	// Parse request
+	req := new(CountriesFormRequest)
+	if err := c.Bind(req); err != nil {
+		c.Logger().Error(err)
+		return err
+	} else if ok, errs := cv.ValidateCtx(req, ctx); !ok {
+		return c.JSON(http.StatusBadRequest, errs)
+	}
+
+	record.Code = req.Code
+	record.Name = req.Name
+
+	if err := db.Save(record).Error; err != nil {
+		c.Logger().Error(err)
+		return err
+	}
+
+	return c.JSON(http.StatusOK, record)
 }
 
 func (e Countries) Remove(c echo.Context) error {

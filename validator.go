@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/jinzhu/gorm"
-	"github.com/memclutter/user-crm/models"
 	"gopkg.in/go-playground/validator.v9"
 )
 
@@ -27,7 +26,7 @@ func NewCustomValidator() (*CustomValidator, error) {
 		db := ctx.Value("db").(*gorm.DB)
 		countryCode := fl.Field().String()
 		totalCount := 0
-		if err := db.Model(&models.Country{}).Where("code = ?", countryCode).Count(&totalCount).Error; err != nil {
+		if err := db.Where("code = ?", countryCode).Count(&totalCount).Error; err != nil {
 			// TODO handle validate database error
 			panic(err)
 			return false

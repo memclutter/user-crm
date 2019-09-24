@@ -81,7 +81,7 @@
         }
       }
     },
-    "/countries/:code": {
+    "/countries/{code}": {
       "put": {
         "tags": [
           "countries"
@@ -237,7 +237,7 @@
         }
       }
     },
-    "/users/:id": {
+    "/users/{id}": {
       "put": {
         "tags": [
           "users"

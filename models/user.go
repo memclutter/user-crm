@@ -9,6 +9,6 @@ type User struct {
 	Username    string    `json:"username"`
 	Email       string    `json:"email"`
 	Birthday    time.Time `json:"birthday"`
-	CountryCode string    `json:"country_code"`
+	CountryCode string    `json:"countryCode"`
 	Gender      string    `json:"gender"`
 }

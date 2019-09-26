@@ -1,11 +1,11 @@
 <template>
   <v-app>
-    <v-app-bar dark color="accent">
+    <v-app-bar app dark color="secondary">
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
       <v-toolbar-title>User CRM</v-toolbar-title>
 
-      <div class="flex-grow-1"></div>
+      <v-spacer></v-spacer>
 
       <v-toolbar-items>
         <v-btn text :to="{name: 'users'}">

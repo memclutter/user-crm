@@ -8,7 +8,7 @@
       <v-spacer></v-spacer>
 
       <v-toolbar-items>
-        <v-btn text :to="{name: 'users'}">
+        <v-btn text :to="{name: 'users'}" :exact="true">
           <v-icon>fa-users</v-icon>
         </v-btn>
 

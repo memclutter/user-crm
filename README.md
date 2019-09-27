@@ -1,12 +1,26 @@
 # User CRM
 
-CRM example. User database management.
+This is my hobby project. As an idea mini-CRM was taken. The purpose of this system is maintaining a user database. 
+
+Initially, it is supposed to store such user characteristics as gender, date of birth, country, etc. Also added a directory of countries that can be edited.
+
+The plans to deploy the project to some free hosting fan for (for example on [heroku](https://www.heroku.com)). 
 
 ## Features
 
 - CRUD operations
 - Import/Export list as csv
 - Filter & sort
+
+## Technology stack
+
+- [Golang](https://golang.org) as backend 
+- [Echo](https://echo.labstack.com) as http framework
+- [PostgreSQL](https://www.postgresql.org) as database
+- [Vue.js](https://vuejs.org) as frontend
+- [Vuetify](https://vuetifyjs.com) as ui
+- [Swagger](https://swagger.io) for docs
+- [Heroku?](https://www.heroku.com) as cloud platform
 
 ## Database migrations
 

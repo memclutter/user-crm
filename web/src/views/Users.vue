@@ -1,40 +1,21 @@
 <template>
-  <v-list three-line>
-    <v-list-item v-for="item in items" :key="item.id" @click="">
-      <v-list-item-avatar color="secondary">
-        <span class="white--text">
-          {{item.username[0].toUpperCase()}}
-        </span>
-      </v-list-item-avatar>
-      <v-list-item-content>
-        <v-list-item-title>
-          {{item.username}}
-        </v-list-item-title>
-        <v-list-item-title>
-          {{item.email}}
-        </v-list-item-title>
-      </v-list-item-content>
-      <v-spacer></v-spacer>
-      <v-list-item-action>
-        <v-list-item-icon>
-          <flag :iso="item.countryCode" :squared="false"/>
-        </v-list-item-icon>
-      </v-list-item-action>
-      <v-list-item-action>
-        <v-list-item-icon>
-          <v-icon :color="item.gender === 'male' ? 'secondary' : 'primary'">
-            {{item.gender === 'male' ? 'fa-mars' : 'fa-venus'}}
-          </v-icon>
-        </v-list-item-icon>
-      </v-list-item-action>
-    </v-list-item>
-  </v-list>
+  <div>
+    <v-list three-line>
+      <users-list-item v-for="item in items" :key="item.id" v-bind="item" />
+    </v-list>
+  </div>
 </template>
 
 <script>
 import $http from '@/http'
 
+import UsersListItem from "@/components/UsersListItem";
+
 export default {
+
+  components: {
+    UsersListItem
+  },
 
   data: () => ({
     loading: false,

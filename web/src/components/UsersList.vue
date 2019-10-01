@@ -24,6 +24,12 @@
     <template v-slot:item.countryCode="{ item }">
       <flag :iso="item.countryCode" :squared="false"/>
     </template>
+    <template v-slot:item.birthday="{ item }">
+      {{ item.birthday | moment('DD/MM/YYYY') }}
+    </template>
+    <template v-slot:item.age="{ item }">
+      {{ new Date() | moment('diff', item.birthday, 'years') }}
+    </template>
     <template v-slot:item.actions="{ item }">
       <v-btn icon color="success">
         <v-icon>fa-pen</v-icon>

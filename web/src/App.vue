@@ -32,7 +32,9 @@
       </v-toolbar-items>
     </v-app-bar>
     <v-content>
-      <router-view></router-view>
+      <v-container fill-height>
+        <router-view></router-view>
+      </v-container>
     </v-content>
   </v-app>
 </template>

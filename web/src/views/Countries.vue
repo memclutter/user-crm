@@ -1,49 +1,38 @@
 <template>
-  <v-list three-line>
-    <v-list-item v-for="item in items" :key="item.id" v-on="{}">
-      <v-list-item-action>
-        <v-list-item-icon >
-          <flag :iso="item.code" :squared="false"/>
-        </v-list-item-icon>
-      </v-list-item-action>
-      <v-list-item-content>
-        <v-list-item-title>
-          {{item.name}}
-        </v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-  </v-list>
+  <v-layout column>
+
+    <v-flex shrink>
+      <countries-list />
+    </v-flex>
+
+    <v-flex shrink align-self-center mt-8>
+      <v-pagination :value="page" color="primary" :total-visible="10" :length="pageCount" @input="changePage"/>
+    </v-flex>
+
+  </v-layout>
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+
+import CountriesList from "@/components/CountriesList";
+
 export default {
 
-  data: () => ({
-    loading: false,
-    offset: 0,
-    limit: 25,
-    items: [],
-    totalCount: 0
-  }),
+  components: {
+    CountriesList
+  },
+
+  computed: {
+    ...mapGetters('countries', ['page', 'pageCount'])
+  },
 
   async mounted() {
     await this.load();
   },
 
   methods: {
-    async load() {
-      this.loading = true;
-
-      try {
-        const params = {limit: this.limit, offset: this.offset};
-        const {data: {totalCount, items}} = await this.$axios.get('/countries', {params});
-
-        this.totalCount = totalCount;
-        this.items = items;
-      } finally {
-        this.loading = false;
-      }
-    }
+    ...mapActions('countries', ['load', 'changePage'])
   }
 }
 </script>

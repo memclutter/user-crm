@@ -1,6 +1,6 @@
 <template>
   <v-list three-line>
-    <v-list-item v-for="item in items" :key="item.id" @click="">
+    <v-list-item v-for="item in items" :key="item.id" v-on="{}">
       <v-list-item-action>
         <v-list-item-icon >
           <flag :iso="item.code" :squared="false"/>
@@ -16,8 +16,6 @@
 </template>
 
 <script>
-import $http from '@/http'
-
 export default {
 
   data: () => ({
@@ -38,7 +36,7 @@ export default {
 
       try {
         const params = {limit: this.limit, offset: this.offset};
-        const {data: {totalCount, items}} = await $http.get('/countries', {params});
+        const {data: {totalCount, items}} = await this.$axios.get('/countries', {params});
 
         this.totalCount = totalCount;
         this.items = items;

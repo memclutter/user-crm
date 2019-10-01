@@ -1,6 +1,7 @@
+import Vue from 'vue';
 import Axios from "axios";
 
-const http = Axios.create({
+const $axios = Axios.create({
   baseURL: "/api/",
   headers: {
     'Content-Type': 'application/json',
@@ -8,4 +9,6 @@ const http = Axios.create({
   }
 });
 
-export default http;
+Vue.prototype.$axios = $axios;
+
+export default $axios;

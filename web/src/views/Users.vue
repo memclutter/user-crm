@@ -7,8 +7,6 @@
 </template>
 
 <script>
-import $http from '@/http'
-
 import UsersListItem from "@/components/UsersListItem";
 
 export default {
@@ -35,7 +33,7 @@ export default {
 
       try {
         const params = {limit: this.limit, offset: this.offset}
-        const {data: {totalCount, items}} = await $http.get('/users', {params});
+        const {data: {totalCount, items}} = await this.$axios.get('/users', {params});
 
         this.totalCount = totalCount;
         this.items = items;

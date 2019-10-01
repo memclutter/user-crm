@@ -1,46 +1,38 @@
 <template>
-  <div>
-    <v-list three-line>
-      <users-list-item v-for="item in items" :key="item.id" v-bind="item" />
-    </v-list>
-  </div>
+  <v-layout column>
+
+    <v-flex shrink>
+      <users-list/>
+    </v-flex>
+
+    <v-flex shrink align-self-center mt-8>
+      <v-pagination :value="page" color="primary" :total-visible="10" :length="pageCount" @input="changePage"/>
+    </v-flex>
+
+  </v-layout>
 </template>
 
 <script>
-import UsersListItem from "@/components/UsersListItem";
+import { mapActions, mapGetters } from "vuex";
+
+import UsersList from "@/components/UsersList";
 
 export default {
 
   components: {
-    UsersListItem
+    UsersList
   },
 
-  data: () => ({
-    loading: false,
-    offset: 0,
-    limit: 25,
-    items: [],
-    totalCount: 0
-  }),
+  computed: {
+    ...mapGetters('users', ['page', 'pageCount'])
+  },
 
   async mounted() {
     await this.load();
   },
 
   methods: {
-    async load() {
-      this.loading = true;
-
-      try {
-        const params = {limit: this.limit, offset: this.offset}
-        const {data: {totalCount, items}} = await this.$axios.get('/users', {params});
-
-        this.totalCount = totalCount;
-        this.items = items;
-      } finally {
-        this.loading = false;
-      }
-    }
+    ...mapActions('users', ['load', 'changePage'])
   }
 }
 </script>

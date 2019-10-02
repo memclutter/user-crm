@@ -58,15 +58,17 @@ export default {
     },
     openRemoveDialog: (state, item) => {
       state.removeDialog = true;
+      state.form.pk = item.code;
       state.form.fields = item;
     },
     closeRemoveDialog: (state) => {
+      state.items = state.items.filter(item => item.code !== state.form.pk);
       state.removeDialog = false;
+      state.form.pk = null;
       state.form.fields = {
         code: null,
         name: null
       };
-      state.form.errors = {};
     },
     setFormLoading: (state, loading) => state.form.loading = loading,
     setFormErrors: (state, errors) => state.form.errors = errors
@@ -96,6 +98,22 @@ export default {
       context.commit('setOffset', (newPage - 1) * context.state.limit);
 
       await context.dispatch('load');
+    },
+
+    async remove(context) {
+      context.commit('setFormLoading', true);
+
+      try {
+        const {status} = await axios.delete(`/countries/${context.state.form.pk}`);
+
+        if (status === 204) {
+          context.commit('closeRemoveDialog');
+        } else {
+          // TODO handle other statuses
+        }
+      } finally {
+        context.commit('setFormLoading', false);
+      }
     },
 
     async submit(context, update) {

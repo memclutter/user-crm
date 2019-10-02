@@ -1,7 +1,7 @@
 <template>
   <base-dialog
     v-model="dialog"
-    :title="`Remove country '${item.name}'`"
+    :title="`Remove country '${name}'`"
     color="error"
     width="500"
   >
@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import { mapFields } from "vuex-map-fields";
 
 import BaseDialog from "@/components/BaseDialog";
@@ -22,8 +23,10 @@ export default {
 
   computed: {
     ...mapFields('countries', {
-      dialog: 'removeDialog',
-      item: 'removeItem'
+      dialog: 'removeDialog'
+    }),
+    ...mapState('countries', {
+      name: state => state.form.fields.name
     })
   }
 

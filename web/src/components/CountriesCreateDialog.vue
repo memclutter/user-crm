@@ -5,7 +5,7 @@
     color="primary"
     width="500"
   >
-
+    <countries-form />
   </base-dialog>
 </template>
 
@@ -13,11 +13,13 @@
 import { mapFields } from "vuex-map-fields";
 
 import BaseDialog from "@/components/BaseDialog";
+import CountriesForm from "@/components/CountriesForm";
 
 export default {
 
   components: {
-    BaseDialog
+    BaseDialog,
+    CountriesForm
   },
 
   computed: {

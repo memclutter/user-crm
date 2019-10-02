@@ -14,14 +14,15 @@ export default {
     totalCount: 0,
     createDialog: false,
     updateDialog: false,
-    updateItem: {
-      code: null,
-      name: null
-    },
     removeDialog: false,
-    removeItem: {
-      code: null,
-      name: null
+    form: {
+      loading: false,
+      pk: null,
+      fields: {
+        code: null,
+        name: null
+      },
+      errors: {}
     }
   },
 
@@ -43,26 +44,32 @@ export default {
     closeCreateDialog: (state) => state.createDialog = false,
     openUpdateDialog: (state, item) => {
       state.updateDialog = true;
-      state.updateItem = item;
+      state.form.pk = item.code;
+      state.form.fields = item;
     },
     closeUpdateDialog: (state) => {
       state.updateDialog = false;
-      state.updateItem = {
+      state.form.pk = null;
+      state.form.fields = {
         code: null,
         name: null
       };
+      state.form.errors = {};
     },
     openRemoveDialog: (state, item) => {
       state.removeDialog = true;
-      state.removeItem = item;
+      state.form.fields = item;
     },
     closeRemoveDialog: (state) => {
       state.removeDialog = false;
-      state.removeItem = {
+      state.form.fields = {
         code: null,
         name: null
       };
-    }
+      state.form.errors = {};
+    },
+    setFormLoading: (state, loading) => state.form.loading = loading,
+    setFormErrors: (state, errors) => state.form.errors = errors
   },
 
   actions: {
@@ -90,5 +97,31 @@ export default {
 
       await context.dispatch('load');
     },
+
+    async submit(context, update) {
+      context.commit('setFormLoading', true);
+
+      try {
+        if (update) {
+          const {status, data} = await axios.put(`/countries/${context.state.form.pk}`, context.state.form.fields);
+
+          if (status === 200) {
+            context.commit('closeUpdateDialog');
+          } else {
+            context.commit('setFormErrors', data);
+          }
+        } else {
+          const {status, data} = await axios.post('/countries', context.state.form.fields);
+
+          if (status === 201) {
+            context.commit('closeCreateDialog');
+          } else {
+            context.commit('setFormErrors', data);
+          }
+        }
+      } finally {
+        context.commit('setFormLoading', false);
+      }
+    }
   }
 }

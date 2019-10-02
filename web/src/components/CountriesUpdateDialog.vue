@@ -1,7 +1,7 @@
 <template>
   <base-dialog
     v-model="dialog"
-    title="Create countries"
+    :title="`Update country '${item.name}'`"
     color="primary"
     width="500"
   >
@@ -22,7 +22,8 @@ export default {
 
   computed: {
     ...mapFields('countries', {
-      dialog: 'createDialog'
+      dialog: 'updateDialog',
+      item: 'updateItem'
     })
   }
 

@@ -9,6 +9,8 @@
       <v-pagination :value="page" color="primary" :total-visible="10" :length="pageCount" @input="changePage"/>
     </v-flex>
 
+    <countries-remove-dialog />
+    <countries-update-dialog />
     <countries-create-dialog />
 
     <v-btn fab fixed bottom right color="success" @click="openCreateDialog">
@@ -22,10 +24,14 @@ import { mapActions, mapGetters, mapMutations } from "vuex";
 
 import CountriesList from "@/components/CountriesList";
 import CountriesCreateDialog from "@/components/CountriesCreateDialog";
+import CountriesUpdateDialog from "@/components/CountriesUpdateDialog";
+import CountriesRemoveDialog from "@/components/CountriesRemoveDialog";
 
 export default {
 
   components: {
+    CountriesRemoveDialog,
+    CountriesUpdateDialog,
     CountriesCreateDialog,
     CountriesList
   },

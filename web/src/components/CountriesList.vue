@@ -13,10 +13,10 @@
       <flag :iso="item.code" :squared="false"/>
     </template>
     <template v-slot:item.actions="{ item }">
-      <v-btn icon color="success">
+      <v-btn icon color="success" @click="openUpdateDialog(item)">
         <v-icon>fa-pen</v-icon>
       </v-btn>
-      <v-btn icon color="error">
+      <v-btn icon color="error" @click="openRemoveDialog(item)">
         <v-icon>fa-trash</v-icon>
       </v-btn>
     </template>
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 
 export default {
 
@@ -43,6 +43,10 @@ export default {
       limit: state => state.limit,
       totalCount: state => state.totalCount,
     })
+  },
+
+  methods: {
+    ...mapMutations('countries', ['openUpdateDialog', 'openRemoveDialog'])
   }
 
 }

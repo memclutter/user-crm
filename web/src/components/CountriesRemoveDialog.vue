@@ -1,8 +1,8 @@
 <template>
   <base-dialog
     v-model="dialog"
-    title="Create countries"
-    color="primary"
+    :title="`Remove country '${item.name}'`"
+    color="error"
     width="500"
   >
 
@@ -22,7 +22,8 @@ export default {
 
   computed: {
     ...mapFields('countries', {
-      dialog: 'createDialog'
+      dialog: 'removeDialog',
+      item: 'removeItem'
     })
   }
 

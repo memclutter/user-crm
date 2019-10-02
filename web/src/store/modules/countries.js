@@ -12,7 +12,17 @@ export default {
     limit: 10,
     items: [],
     totalCount: 0,
-    createDialog: false
+    createDialog: false,
+    updateDialog: false,
+    updateItem: {
+      code: null,
+      name: null
+    },
+    removeDialog: false,
+    removeItem: {
+      code: null,
+      name: null
+    }
   },
 
   getters: {
@@ -30,7 +40,29 @@ export default {
       state.totalCount = totalCount;
     },
     openCreateDialog: (state) => state.createDialog = true,
-    closeCreateDialog: (state) => state.createDialog = false
+    closeCreateDialog: (state) => state.createDialog = false,
+    openUpdateDialog: (state, item) => {
+      state.updateDialog = true;
+      state.updateItem = item;
+    },
+    closeUpdateDialog: (state) => {
+      state.updateDialog = false;
+      state.updateItem = {
+        code: null,
+        name: null
+      };
+    },
+    openRemoveDialog: (state, item) => {
+      state.removeDialog = true;
+      state.removeItem = item;
+    },
+    closeRemoveDialog: (state) => {
+      state.removeDialog = false;
+      state.removeItem = {
+        code: null,
+        name: null
+      };
+    }
   },
 
   actions: {

@@ -1,3 +1,5 @@
+import { getField, updateField} from 'vuex-map-fields'
+
 import axios from '@/plugins/axios'
 
 export default {
@@ -9,21 +11,26 @@ export default {
     offset: 0,
     limit: 10,
     items: [],
-    totalCount: 0
+    totalCount: 0,
+    createDialog: false
   },
 
   getters: {
+    getField,
     page: state => state.offset / state.limit + 1,
     pageCount: state => Math.floor(state.totalCount / state.limit) + (state.totalCount % state.limit > 0 ? 1 : 0),
   },
 
   mutations: {
+    updateField,
     setLoading: (state, loading) => state.loading = loading,
     setOffset: (state, offset) => state.offset = offset,
     setData: (state, {items, totalCount}) => {
       state.items = items;
       state.totalCount = totalCount;
-    }
+    },
+    openCreateDialog: (state) => state.createDialog = true,
+    closeCreateDialog: (state) => state.createDialog = false
   },
 
   actions: {

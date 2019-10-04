@@ -5,7 +5,7 @@
     color="primary"
     width="500"
   >
-    <!-- TODO users form -->
+    <users-form update />
   </base-dialog>
 </template>
 
@@ -14,10 +14,12 @@ import { mapState } from "vuex";
 import { mapFields } from "vuex-map-fields";
 
 import BaseDialog from "@/components/BaseDialog";
+import UsersForm from "@/components/UsersForm";
 
 export default {
 
   components: {
+    UsersForm,
     BaseDialog
   },
 

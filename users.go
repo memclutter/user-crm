@@ -3,6 +3,7 @@ package usercrm
 import (
 	"errors"
 	"net/http"
+	"strconv"
 
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
@@ -140,7 +141,61 @@ func (e Users) Create(c echo.Context) error {
 
 func (e Users) Update(c echo.Context) error {
 
-	return nil
+	// Parse user id
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		return c.NoContent(http.StatusNotFound)
+	}
+
+	// Get custom validator instance
+	cv, ok := c.Get("validator").(*CustomValidator)
+	if !ok {
+		err := errors.New("validator instance missing in context")
+		c.Logger().Error(err)
+		return err
+	}
+
+	// Get database instance
+	db, ok := c.Get("db").(*gorm.DB)
+	if !ok {
+		err := errors.New("database instance missing in context")
+		c.Logger().Error(err)
+		return err
+	}
+
+	// Find record
+	record := &models.User{}
+	if err := db.Model(&record).Where("id = ?", id).First(record).Error; err == gorm.ErrRecordNotFound {
+		return c.NoContent(http.StatusNotFound)
+	} else if err != nil {
+		c.Logger().Error(err)
+		return err
+	}
+
+	// Parse request
+	req := new(UsersFormRequest)
+	if err := c.Bind(req); err != nil {
+		c.Logger().Error(err)
+		return err
+	} else if ok, errs := cv.ValidateCtx(req, c.Request().Context()); !ok {
+		// TODO custom validation for unique username, email and validate countryCode
+		return c.JSON(http.StatusBadRequest, errs)
+	}
+
+	// Update record
+	record.Username = req.Username
+	record.Email = req.Email
+	record.Birthday = req.Birthday
+	record.CountryCode = req.CountryCode
+	record.Gender = req.Gender
+
+	// Save in database
+	if err := db.Save(record).Error; err != nil {
+		c.Logger().Error(err)
+		return err
+	}
+
+	return c.JSON(http.StatusOK, record)
 }
 
 func (e Users) Remove(c echo.Context) error {

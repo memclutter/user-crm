@@ -48,7 +48,7 @@ export default {
     closeCreateDialog: (state) => state.createDialog = false,
     openUpdateDialog: (state, item) => {
       state.updateDialog = true;
-      state.form.pk = item.code;
+      state.form.pk = item.id;
       state.form.fields = item;
     },
     closeUpdateDialog: (state) => {
@@ -62,7 +62,7 @@ export default {
     },
     openRemoveDialog: (state, item) => {
       state.removeDialog = true;
-      state.form.pk = item.code;
+      state.form.pk = item.id;
       state.form.fields = item;
     },
     closeRemoveDialog: (state) => {

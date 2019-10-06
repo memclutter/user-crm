@@ -66,7 +66,7 @@ func (e Users) List(c echo.Context) error {
 	}
 
 	if len(req.AgeRange) == 2 {
-		// TODO filter by age
+		query = query.Where("date_part('year', age(birthday)) >= ? AND date_part('year', age(birthday)) <= ?", req.AgeRange[0], req.AgeRange[1])
 	}
 
 	if len(req.Gender) > 0 {

@@ -3,7 +3,6 @@ package usercrm
 import (
 	"errors"
 	"net/http"
-	"time"
 
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
@@ -30,11 +29,11 @@ type UsersListRequest struct {
 }
 
 type UsersFormRequest struct {
-	Username    string `json:"username" form:"username" validate:"required"`
-	Email       string `json:"email" form:"email" validate:"required,email"`
-	Birthday    string `json:"birthday" form:"birthday"`
-	CountryCode string `json:"countryCode" form:"countryCode"`
-	Gender      string `json:"gender" form:"gender"`
+	Username    string          `json:"username" form:"username" validate:"required"`
+	Email       string          `json:"email" form:"email" validate:"required,email"`
+	Birthday    models.Birthday `json:"birthday" form:"birthday"`
+	CountryCode string          `json:"countryCode" form:"countryCode"`
+	Gender      string          `json:"gender" form:"gender"`
 }
 
 type Users struct {
@@ -122,19 +121,11 @@ func (e Users) Create(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, errs)
 	}
 
-	// Birthday parse in time.Time
-	birthday, err := time.Parse("2006-01-02", req.Birthday)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{
-			"birthday": "DATE",
-		})
-	}
-
 	// Create user record
 	record := &models.User{
 		Username:    req.Username,
 		Email:       req.Email,
-		Birthday:    birthday,
+		Birthday:    req.Birthday,
 		CountryCode: req.CountryCode,
 		Gender:      req.Gender,
 	}

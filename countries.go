@@ -23,8 +23,10 @@ func NewCountries(e *echo.Group) *Countries {
 }
 
 type CountriesListRequest struct {
-	Offset int64 `query:"offset"`
-	Limit  int64 `query:"limit"`
+	Offset int64    `query:"offset"`
+	Limit  int64    `query:"limit"`
+	Search string   `query:"search"`
+	Code   []string `query:"code"`
 }
 
 type CountriesFormRequest struct {
@@ -52,9 +54,22 @@ func (e Countries) List(c echo.Context) error {
 		return err
 	}
 
+	// Create query
+	query := db.Model(&models.Country{})
+
+	// Filter by search text
+	if len(req.Search) > 0 {
+		query = query.Where("LOWER(name) LIKE LOWER(?)", req.Search+"%")
+	}
+
+	// Filter by code
+	if len(req.Code) > 0 {
+		query = query.Where("code IN (?)", req.Code)
+	}
+
 	// Get total count
 	totalCount := 0
-	if err := db.Model(&models.Country{}).Count(&totalCount).Error; err != nil {
+	if err := query.Count(&totalCount).Error; err != nil {
 		c.Logger().Error(err)
 		return err
 	}
@@ -63,7 +78,7 @@ func (e Countries) List(c echo.Context) error {
 	result := make([]models.Country, 0)
 
 	// Build query
-	if err := db.Offset(req.Offset).Limit(req.Limit).Find(&result).Error; err != nil {
+	if err := query.Offset(req.Offset).Limit(req.Limit).Find(&result).Error; err != nil {
 		c.Logger().Error(err)
 		return err
 	}

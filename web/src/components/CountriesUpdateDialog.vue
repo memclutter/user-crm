@@ -5,7 +5,7 @@
     color="primary"
     width="500"
   >
-    <countries-form update />
+    <countries-form update v-if="dialog"  />
   </base-dialog>
 </template>
 

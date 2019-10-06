@@ -8,7 +8,7 @@
     </v-radio-group>
     <birthday-field outlined label="Brithday" v-model="birthday" :error-messages="errors.birthday" />
 
-    <!-- TODO Country select -->
+    <countries-field outlined label="Country" v-model="countryCode" :error-messages="errors.countryCode" />
 
     <v-row>
       <v-col cols="auto">
@@ -29,9 +29,10 @@
 import { mapFields } from "vuex-map-fields";
 import { mapState } from "vuex";
 import BirthdayField from "@/components/BirthdayField";
+import CountriesField from "@/components/CountriesField";
 
 export default {
-  components: {BirthdayField},
+  components: {CountriesField, BirthdayField},
   props: {
     update: Boolean
   },
@@ -42,7 +43,7 @@ export default {
       email: 'form.fields.email',
       gender: 'form.fields.gender',
       birthday: 'form.fields.birthday',
-      countryCode: 'form.fields.cotunryCode',
+      countryCode: 'form.fields.countryCode',
     }),
     ...mapState('users', {
       loading: state => state.form.loading,

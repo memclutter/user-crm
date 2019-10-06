@@ -5,7 +5,7 @@
     color="primary"
     width="500"
   >
-    <users-form />
+    <users-form v-if="dialog" />
   </base-dialog>
 </template>
 

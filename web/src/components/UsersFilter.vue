@@ -35,7 +35,7 @@
 
 <script>
 import { mapFields } from "vuex-map-fields";
-import { mapActions, mapMutations } from "vuex";
+import { mapActions } from "vuex";
 
 import CountriesField from "@/components/CountriesField";
 

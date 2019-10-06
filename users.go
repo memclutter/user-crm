@@ -25,6 +25,7 @@ type UsersListRequest struct {
 	CountryCode string `query:"countryCode"`
 	AgeRange    []int  `query:"ageRange[]"`
 	Gender      string `query:"gender"`
+	Search      string `query:"string"`
 	Offset      int64  `query:"offset"`
 	Limit       int64  `query:"limit"`
 }
@@ -70,6 +71,10 @@ func (e Users) List(c echo.Context) error {
 
 	if len(req.Gender) > 0 {
 		query = query.Where("gender = ?", req.Gender)
+	}
+
+	if len(req.Search) > 0 {
+		query = query.Where("(username LIKE ? OR email LIKE ?)", req.Search+"%", req.Search+"%")
 	}
 
 	// Get total count

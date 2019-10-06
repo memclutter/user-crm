@@ -15,6 +15,12 @@ export default {
     createDialog: false,
     updateDialog: false,
     removeDialog: false,
+    filter: {
+      search: null,
+      ageRange: [10, 80],
+      gender: null,
+      countryCode: null
+    },
     form: {
       loading: false,
       pk: null,
@@ -38,6 +44,12 @@ export default {
 
   mutations: {
     updateField,
+    clearFilter: (state) => state.filter = {
+      search: null,
+      ageRange: [10, 80],
+      gender: null,
+      countryCode: null
+    },
     setLoading: (state, loading) => state.loading = loading,
     setOffset: (state, offset) => state.offset = offset,
     setData: (state, {items, totalCount}) => {
@@ -79,12 +91,24 @@ export default {
   },
 
   actions: {
+    async clearFilter(context) {
+      context.commit('setOffset', 0);
+      context.commit('clearFilter');
+      await context.dispatch('load');
+    },
+
+    async applyFilter(context) {
+      context.commit('setOffset', 0);
+      await context.dispatch('load');
+    },
+
     async load(context) {
       context.commit('setLoading', true);
 
       const params = {
         offset: context.state.offset,
-        limit: context.state.limit
+        limit: context.state.limit,
+        ...context.state.filter,
       };
 
       try {

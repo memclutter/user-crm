@@ -2,6 +2,10 @@
   <v-layout column>
 
     <v-flex shrink>
+      <users-filter/>
+    </v-flex>
+
+    <v-flex shrink>
       <users-list/>
     </v-flex>
 
@@ -9,9 +13,9 @@
       <v-pagination :value="page" color="primary" :total-visible="10" :length="pageCount" @input="changePage"/>
     </v-flex>
 
-    <users-create-dialog />
-    <users-update-dialog />
-    <users-remove-dialog />
+    <users-create-dialog/>
+    <users-update-dialog/>
+    <users-remove-dialog/>
 
     <v-btn fab fixed bottom right color="success" @click="openCreateDialog">
       <v-icon>fa-plus</v-icon>
@@ -26,6 +30,7 @@ import UsersList from "@/components/UsersList";
 import UsersCreateDialog from "@/components/UsersCreateDialog";
 import UsersUpdateDialog from "@/components/UsersUpdateDialog";
 import UsersRemoveDialog from "@/components/UsersRemoveDialog";
+import UsersFilter from "@/components/UsersFilter";
 
 export default {
 
@@ -33,7 +38,8 @@ export default {
     UsersRemoveDialog,
     UsersUpdateDialog,
     UsersCreateDialog,
-    UsersList
+    UsersList,
+    UsersFilter
   },
 
   computed: {

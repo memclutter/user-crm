@@ -1,6 +1,8 @@
 <template>
   <v-autocomplete
     :outlined="outlined"
+    :solo="solo"
+    :placeholder="placeholder"
     :error-messages="errorMessages"
     :label="label"
     :value="value"
@@ -18,6 +20,8 @@
 export default {
 
   props: {
+    solo: Boolean,
+    placeholder: String,
     outlined: Boolean,
     label: String,
     errorMessages: [Array, String],

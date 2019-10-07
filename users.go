@@ -26,6 +26,7 @@ type UsersListRequest struct {
 	AgeRange    []int  `query:"ageRange[]"`
 	Gender      string `query:"gender"`
 	Search      string `query:"string"`
+	Sort        string `query:"sort"`
 	Offset      int64  `query:"offset"`
 	Limit       int64  `query:"limit"`
 }

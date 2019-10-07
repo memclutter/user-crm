@@ -2,11 +2,14 @@ package usercrm
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
+	"github.com/lib/pq"
 	"github.com/memclutter/user-crm/models"
 )
 
@@ -85,13 +88,29 @@ func (e Users) List(c echo.Context) error {
 		return err
 	}
 
+	// Parse sort param
+	if len(req.Sort) > 0 {
+		parts := strings.Split(req.Sort, ",")
+		for _, part := range parts {
+			if part[0] == '-' {
+				query = query.Order(gorm.Expr(fmt.Sprintf("%s DESC", pq.QuoteIdentifier(part[1:]))))
+			} else {
+				query = query.Order(gorm.Expr(fmt.Sprintf("%s ASC", pq.QuoteIdentifier(part))))
+			}
+		}
+	}
+
 	// Result
 	result := make([]models.User, 0)
 
 	// Build query
 	if err := query.Offset(req.Offset).Limit(req.Limit).Find(&result).Error; err != nil {
-		c.Logger().Error(err)
-		return err
+		if pqErr := err.(*pq.Error); pqErr.Code == "42703" {
+			return c.JSON(http.StatusBadRequest, map[string]string{"sort": "Invalid column name in sort"})
+		} else {
+			c.Logger().Error(err)
+			return err
+		}
 	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{

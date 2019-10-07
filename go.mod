@@ -10,6 +10,7 @@ require (
 	github.com/labstack/echo/v4 v4.1.10
 	github.com/labstack/gommon v0.3.0
 	github.com/leodido/go-urn v1.1.0 // indirect
+	github.com/lib/pq v1.1.1
 	github.com/urfave/cli v1.22.1
 	gopkg.in/go-playground/validator.v9 v9.29.1
 )

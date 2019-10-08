@@ -29,10 +29,7 @@
       <flag :iso="item.countryCode" :squared="false"/>
     </template>
     <template v-slot:item.birthday="{ item }">
-      {{ item.birthday | moment('DD/MM/YYYY') }}
-    </template>
-    <template v-slot:item.age="{ item }">
-      {{ new Date() | moment('diff', item.birthday, 'years') }}
+      {{ new Date() | moment('diff', item.birthday, 'years') }} (birthday {{ item.birthday | moment('DD/MM/YYYY') }})
     </template>
     <template v-slot:item.actions="{ item }">
       <v-btn icon color="success" @click="openUpdateDialog(item)">
@@ -63,8 +60,7 @@ export default {
       {value: 'email', text: 'Email', align: 'left', sortable: false},
       {value: 'username', text: 'Username', align: 'left', sortable: false},
       {value: 'gender', text: 'Gender', align: 'left', sortable: true},
-      {value: 'age', text: 'Age', align: 'left', sortable: false},
-      {value: 'birthday', text: 'Birthday', align: 'left', sortable: true},
+      {value: 'birthday', text: 'Age/Birthday', align: 'left', sortable: true},
       {value: 'countryCode', text: 'Country', align: 'left', sortable: true},
       {value: 'actions', text: 'Actions', align: 'right', sortable: false}
     ]

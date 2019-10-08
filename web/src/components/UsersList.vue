@@ -7,8 +7,12 @@
     :items-per-page="limit"
     :server-items-length="totalCount"
     hide-default-footer
+    hide-default-header
     disable-sort
   >
+    <template v-slot:header="{props: {headers}}">
+      <table-sort-header :sort="sort" :headers="headers" @updateSort="changeSort" />
+    </template>
     <template v-slot:item.avatarUrl="{ item }">
       <v-avatar color="secondary" :size="32">
         <span class="white--text">
@@ -42,9 +46,15 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
+
+import TableSortHeader from "@/components/TableSortHeader";
 
 export default {
+
+  components: {
+    TableSortHeader
+  },
 
   data: () => ({
     headers: [
@@ -52,10 +62,10 @@ export default {
       {value: 'avatarUrl', text: 'Avatar', align: 'left', sortable: false},
       {value: 'email', text: 'Email', align: 'left', sortable: false},
       {value: 'username', text: 'Username', align: 'left', sortable: false},
-      {value: 'gender', text: 'Gender', align: 'left', sortable: false},
+      {value: 'gender', text: 'Gender', align: 'left', sortable: true},
       {value: 'age', text: 'Age', align: 'left', sortable: false},
-      {value: 'birthday', text: 'Birthday', align: 'left', sortable: false},
-      {value: 'countryCode', text: 'Country', align: 'left', sortable: false},
+      {value: 'birthday', text: 'Birthday', align: 'left', sortable: true},
+      {value: 'countryCode', text: 'Country', align: 'left', sortable: true},
       {value: 'actions', text: 'Actions', align: 'right', sortable: false}
     ]
   }),
@@ -64,12 +74,14 @@ export default {
     ...mapState('users', {
       loading: state => state.loading,
       items: state => state.items,
+      sort: state => state.sort,
       limit: state => state.limit,
       totalCount: state => state.totalCount,
     })
   },
 
   methods: {
+    ...mapActions('users', ['changeSort']),
     ...mapMutations('users', ['openUpdateDialog', 'openRemoveDialog'])
   }
 

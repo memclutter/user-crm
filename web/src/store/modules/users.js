@@ -8,6 +8,7 @@ export default {
   state: {
     loading: false,
     page: 1,
+    sort: '',
     offset: 0,
     limit: 10,
     items: [],
@@ -51,6 +52,7 @@ export default {
       countryCode: null
     },
     setLoading: (state, loading) => state.loading = loading,
+    setSort: (state, sort) => state.sort = sort,
     setOffset: (state, offset) => state.offset = offset,
     setData: (state, {items, totalCount}) => {
       state.items = items;
@@ -108,6 +110,7 @@ export default {
       const params = {
         offset: context.state.offset,
         limit: context.state.limit,
+        sort: context.state.sort,
         ...context.state.filter,
       };
 
@@ -120,6 +123,12 @@ export default {
       } finally {
         context.commit('setLoading', false);
       }
+    },
+
+    async changeSort(context, newSort) {
+      context.commit('setSort', newSort);
+
+      await context.dispatch('load');
     },
 
     async changePage(context, newPage) {
